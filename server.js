@@ -21,9 +21,8 @@ app.get('/newgame', function(req, res){
 	console.log('New game: '+hash);
 	//start timer
 	//check is computer start to move
-	computerMove(hash);
-	drawBoard(hash);
-    res.json({ id : hash });
+	computerMove(hash,res);
+	res.json({ id : hash });
 });
 
 app.get('/pos/:game/:pos(\[0-8])', function(req, res){
@@ -52,14 +51,48 @@ app.get('/pos/:game/:pos(\[0-8])', function(req, res){
 			return;
 		}
 		games[gameId].board[pos]='X';
-		games[gameId].next = 'O';
 		drawBoard(gameId);
-		computerMove(gameId);
+		if(winner = calculateWinner(gameId)){
+			var description = endGame(gameId,winner);
+			res.json({winner: winner, description : description})
+			return
+		}
+		games[gameId].next = 'O';
+		computerMove(gameId,res);
 		res.json(games[gameId]);
 	}
 });
 
 //check winner
+function calculateWinner(gameId) {
+	var board = games[gameId].board;
+	
+	const lines = [
+		[0, 1, 2],
+		[3, 4, 5],
+		[6, 7, 8],
+		[0, 3, 6],
+		[1, 4, 7],
+		[2, 5, 8],
+		[0, 4, 8],
+		[2, 4, 6],
+	];
+	for (i = 0; i < lines.length; i++) {
+		var a = lines[i][0];
+		var b = lines[i][1];
+		var c = lines[i][2];
+	
+		if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+			return board[a];
+		}
+	}
+  
+	if(availableSquares(gameId)===0){
+		//draw
+		return 'D';
+	}
+	return null;
+}
 
 //check available squares
 function availableSquares(gameId){
@@ -71,11 +104,7 @@ function availableSquares(gameId){
 
 //player/computer move
 
-function playerMove(gameId, pos){
-	
-}
-
-function computerMove(gameId){
+function computerMove(gameId,res){
 	if(games[gameId].next == 'O'){
 		var squares = availableSquares(gameId);
 		console.log('Available squares:',squares);
@@ -96,10 +125,16 @@ function computerMove(gameId){
 
 			console.log(availables);
 			games[gameId].board[availables[computer]]='O';
+			drawBoard(gameId);
+			if(winner = calculateWinner(gameId)){
+				var description = endGame(gameId,winner);
+				res.json({winner: winner, description : description})
+				return;
+			}
+			games[gameId].next = 'X';
 		}
 	}
-	drawBoard(gameId);
-	games[gameId].next = 'X';
+	
 }
 
 function drawBoard(gameId){
@@ -115,6 +150,18 @@ function drawBoard(gameId){
 			row = '|';
 		}
 	}
+}
+
+function endGame(gameId, winner){
+	if(winner=='D'){
+		console.log('Draw');
+	}else{
+		console.log('The winner is '+winner);
+	}
+	
+	delete games[gameId];
+	return winner=='D' ? 'Draw' : 'The winner is '+winner;
+	return;
 }
 
 var server = app.listen(8080,function(){
