@@ -1,11 +1,18 @@
 var express = require('express');
 var app = express();
+var port = process.env.PORT || 8080;
 var games = [];
+
+app.use(express.static(__dirname + '/public'));
 
 app.all('/', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
+});
+
+app.get("/", function(req, res){
+	res.render('index')
 });
 
 //create new game
@@ -164,7 +171,7 @@ function endGame(gameId, winner){
 	return;
 }
 
-var server = app.listen(8080,function(){
+var server = app.listen(port,function(){
 	var host = server.address().address;
 	var port = server.address().port;
 	
