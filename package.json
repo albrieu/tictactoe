@@ -1,0 +1,15 @@
+{
+  "name": "tictactoe-app",
+  "version": "0.0.1",
+  "author": "David Albrieu",
+  "email": "albrieu@gmail.com",
+  "description": "TicTacToe Game App",
+  "license": "(MIT OR Apache-2.0)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/albrieu/tictactoe.git"
+  },
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
