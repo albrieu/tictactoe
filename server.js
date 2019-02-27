@@ -7,6 +7,17 @@ app.all('/', function (req, res, next) {
     next();
 });
 
+//create new game
+
+//check winner
+
+//check available squares
+
+//save/resume game
+
+//time counter
+
+//player/computer move
 
 var server = app.listen(8080,function(){
 	var host = server.address().address;
