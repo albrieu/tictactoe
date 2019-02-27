@@ -26,6 +26,38 @@ app.get('/newgame', function(req, res){
     res.json({ id : hash });
 });
 
+app.get('/pos/:game/:pos(\[0-8])', function(req, res){
+	
+	var gameId = req.params.game;
+	var pos = req.params.pos;
+	
+	if(!games[gameId]){
+		res.json({ error : -1,  message : 'Game '+ gameId +' dont exists' });
+		return;
+	}
+	
+	var squares = availableSquares(gameId);
+	console.log('Available squares:',squares);
+	
+	if(squares > 0){
+	
+		if(games[gameId].next != 'X'){
+			res.json({ error : -1,  message : 'Is not your turn ' + games[gameId].next });
+			return;
+		}
+		
+		
+		if(games[gameId].board[pos]){
+			res.json({ error : -1,  message : 'Position '+ pos +' is in use by '+ games[gameId].board[pos] });
+			return;
+		}
+		games[gameId].board[pos]='X';
+		games[gameId].next = 'O';
+		drawBoard(gameId);
+		computerMove(gameId);
+		res.json(games[gameId]);
+	}
+});
 
 //check winner
 
@@ -38,6 +70,11 @@ function availableSquares(gameId){
 //time counter
 
 //player/computer move
+
+function playerMove(gameId, pos){
+	
+}
+
 function computerMove(gameId){
 	if(games[gameId].next == 'O'){
 		var squares = availableSquares(gameId);
@@ -61,6 +98,7 @@ function computerMove(gameId){
 			games[gameId].board[availables[computer]]='O';
 		}
 	}
+	drawBoard(gameId);
 	games[gameId].next = 'X';
 }
 
