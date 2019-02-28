@@ -24,10 +24,14 @@ app.get('/newgame', function(req, res){
 	do{
 		hash = Math.random().toString(36).slice(-8);
 	}while(games[hash]);
+	
+	var start = Math.floor(Math.random() * (1 - 0 + 1))
+	console.log(start);
+	var next = (start == 0 ? 'O' : 'X' );
 	games[hash]={ board: [null,null,null,
 		                  null,null,null,
 		                  null,null,null],
-                  next : 'O' };
+                  next : next };
 	console.log('New game: '+hash);
 	//start timer
 	//check is computer start to move

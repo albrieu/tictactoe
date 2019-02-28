@@ -8,7 +8,7 @@
 }
 
 .square{
-  background: rgb(82, 73, 143) none repeat scroll 0% 0%;
+  background: #fff none repeat scroll 0% 0%;
   width: 98px;
   height: 98px;
   border: 1px solid rgb(0, 0, 0);
@@ -16,13 +16,15 @@
   font-size: 80px;
   line-height: 85px;
   text-align: center;
+  cursor: pointer;
 }
 .square:hover{
-  background: #20948B;
+  background: #f3f3f3;
 }
 
-.square .disabled{
-  background: #10948B;
+.square.disabled{
+  background: #f3f3f3;
+  cursor: default;
 }
 
 .margin-top {
@@ -30,9 +32,9 @@
 }
 
 .color-o{
-  color: #ffffff;
+  color: #666666;
 }
 
 .color-x{
-  color: #ffff66;
+  color: #333344;
 }
