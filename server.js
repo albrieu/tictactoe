@@ -20,6 +20,7 @@ app.get("/", function(req, res){
 
 //create new game
 app.get('/newgame', function(req, res){
+	
 	var hash = '';
 	do{
 		hash = Math.random().toString(36).slice(-8);
@@ -31,14 +32,16 @@ app.get('/newgame', function(req, res){
 	games[hash]={ board: [null,null,null,
 		                  null,null,null,
 		                  null,null,null],
-                  next : next };
+                  next : next,
+                  timestamp: Date.now() };
 	console.log('New game: '+hash);
 	//start timer
 	//check is computer start to move
 	computerMove(hash,res);
 	res.json({ id : hash, 
 	           board : games[hash].board, 
-               next: games[hash].next });
+               next: games[hash].next,
+               others: getotherGames() });
 });
 
 app.get('/pos/:game/:pos(\[0-8])', function(req, res){
@@ -80,6 +83,25 @@ app.get('/pos/:game/:pos(\[0-8])', function(req, res){
 	}
 });
 
+//save/resume game
+app.get('/stop/:game', function(req, res){
+	
+	var gameId = req.params.game;
+	endGame(gameId,null);
+	res.json({ others: getotherGames() });
+});
+
+app.get('/resume/:game', function(req, res){
+	
+	var gameId = req.params.game;
+	
+	computerMove(gameId,res);
+	res.json({ id : gameId, 
+	           board : games[gameId].board, 
+               next: games[gameId].next,
+               others: getotherGames() });
+});
+
 //check winner
 function calculateWinner(gameId) {
 	var board = games[gameId].board;
@@ -115,8 +137,19 @@ function calculateWinner(gameId) {
 function availableSquares(gameId){
 	return games[gameId].board.filter(x => x=== null).length;
 }
-//save/resume game
 
+
+function getotherGames(){
+    var othersKeys = Object.keys(games);
+	var others = [];
+	for(i=0;i<othersKeys.length;i++){
+		others[others.length]={
+			id:othersKeys[i],
+			timestamp: games[othersKeys[i]].timestamp
+		};
+	}
+	return others;
+}
 //time counter
 
 //player/computer move
@@ -171,14 +204,19 @@ function drawBoard(gameId){
 }
 
 function endGame(gameId, winner){
-	if(winner=='D'){
-		console.log('Draw');
-	}else{
-		console.log('The winner is '+winner);
-	}
 	
 	delete games[gameId];
-	return winner=='D' ? 'Draw' : 'The winner is '+winner;
+	
+	if(winner!=null){
+		if(winner=='D'){
+			console.log('Draw');
+		}else{
+			console.log('The winner is '+winner);
+		}
+	
+		return winner=='D' ? 'Draw' : 'The winner is '+winner;
+	}
+	
 	return;
 }
 

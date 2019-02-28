@@ -19,28 +19,45 @@
     <![endif]-->
   </head>
   <body>
-	<h1 class="text-center">Tic-tac-toe</h1>
-	<h2 id="message" class="text-center hide"></h2>
-	<div id="board" class="board hide">
-		<div>
-			<div class="square" pos="0"></div>
-			<div class="square" pos="1"></div>
-			<div class="square" pos="2"></div>
+	<div class="container">
+		<h1 class="text-center">Tic-tac-toe</h1>
+		<h2 id="message" class="text-center hide"></h2>
+		<div id="board" class="board hide">
+			<div>
+				<div class="square" pos="0"></div>
+				<div class="square" pos="1"></div>
+				<div class="square" pos="2"></div>
+			</div>
+			<div>
+				<div class="square" pos="3"></div>
+				<div class="square" pos="4"></div>
+				<div class="square" pos="5"></div>
+			</div> 
+			<div>
+				<div class="square" pos="6"></div>
+				<div class="square" pos="7"></div>
+				<div class="square" pos="8"></div>
+			</div>
 		</div>
-		<div>
-			<div class="square" pos="3"></div>
-			<div class="square" pos="4"></div>
-			<div class="square" pos="5"></div>
-		</div> 
-		<div>
-			<div class="square" pos="6"></div>
-			<div class="square" pos="7"></div>
-			<div class="square" pos="8"></div>
+		
+		<div class="text-center margin-top">
+			<button id="btn-newgame" class="btn btn-info">New game</button>
 		</div>
-	</div>
-	
-	<div class="text-center margin-top">
-		<button id="btn-newgame" class="btn btn-info">New game</button>
+		<div id="unfinished" class="row  margin-top"></div>
+		<div id="dummy" class="hide">
+			<div class="row  margin-top">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-2 text-right">
+					<span></span>
+				</div>
+				<div class="col-sm-1 text-left">
+					<button name="resume" class="btn btn-info btn-xs" title="Resume"><i class="glyphicon glyphicon-play"></i></button>
+					<button name="stop" class="btn btn-danger btn-xs margin-left" title="Stop"><i class="glyphicon glyphicon-stop"></i></button>
+				</div>
+				<div class="col-sm-5"></div>
+				
+			</div>
+		</div>
 	</div>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
