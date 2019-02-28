@@ -5,14 +5,17 @@ var games = [];
 
 app.use(express.static(__dirname + '/public'));
 
-app.all('/', function (req, res, next) {
+app.all('/*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next();
+	res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+	res.header("Access-Control-Allow-Methods", "GET, POST","PUT");
+	next();
 });
 
 app.get("/", function(req, res){
+	console.log('sdsadasdas',req.protocol + '://' + req.get('host') + req.originalUrl);
 	res.render('index')
+	
 });
 
 //create new game
@@ -29,7 +32,9 @@ app.get('/newgame', function(req, res){
 	//start timer
 	//check is computer start to move
 	computerMove(hash,res);
-	res.json({ id : hash });
+	res.json({ id : hash, 
+	           board : games[hash].board, 
+               next: games[hash].next });
 });
 
 app.get('/pos/:game/:pos(\[0-8])', function(req, res){
@@ -60,8 +65,9 @@ app.get('/pos/:game/:pos(\[0-8])', function(req, res){
 		games[gameId].board[pos]='X';
 		drawBoard(gameId);
 		if(winner = calculateWinner(gameId)){
+			var board = games[gameId].board;
 			var description = endGame(gameId,winner);
-			res.json({winner: winner, description : description})
+			res.json({winner: winner, description : description, board: board})
 			return
 		}
 		games[gameId].next = 'O';
@@ -134,8 +140,9 @@ function computerMove(gameId,res){
 			games[gameId].board[availables[computer]]='O';
 			drawBoard(gameId);
 			if(winner = calculateWinner(gameId)){
+				var board = games[gameId].board;
 				var description = endGame(gameId,winner);
-				res.json({winner: winner, description : description})
+				res.json({winner: winner, description : description, board: board})
 				return;
 			}
 			games[gameId].next = 'X';
